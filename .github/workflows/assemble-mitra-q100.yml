@@ -1,0 +1,63 @@
+name: assemble-mitra-q100
+on:
+  workflow_dispatch:
+{}
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: [self-hosted, autorun]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Assemble approved asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat \
+            .asset-q100/part01 \
+            .asset-q100/part02 \
+            .asset-q100/part03 \
+            .asset-q100/part04 \
+            .asset-q100/part05 \
+            .asset-q100/part06 \
+            .asset-q100/part07 \
+            .asset-q100/part08 \
+            .asset-q100/part09 \
+            .asset-q100/part10 \
+            .asset-q100/part11 \
+            .asset-q100/r140000 \
+            .asset-q100/r148000 \
+            .asset-q100/r156000 \
+            .asset-q100/r168000 \
+            .asset-q100/r180000 \
+            .asset-q100/r192000 \
+            .asset-q100/r206000 \
+            .asset-q100/r220000 \
+            .asset-q100/r234000 \
+            .asset-q100/r248000 \
+            .asset-q100/r256000 \
+            .asset-q100/r272000 \
+            .asset-q100/r288000 \
+            .asset-q100/r304000 \
+            .asset-q100/r320000 \
+            .asset-q100/r336000 \
+            .asset-q100/r352000 \
+            .asset-q100/r368000 \
+            .asset-q100/r384000 \
+            .asset-q100/r400000 \
+            .asset-q100/r416000 \
+            .asset-q100/r432000 \
+            > mitra-q100.webp
+          echo "d5da9c720dc96328d93aada3396f1a19cb8ce253a82f8650de4f4a179a46896a  mitra-q100.webp" | sha256sum -c -
+          file mitra-q100.webp
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mitra-q100.webp
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "asset: assemble verified Mitra q100 hero"
+            git push
+          fi
